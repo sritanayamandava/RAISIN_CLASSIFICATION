@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raisin Classification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/predict">Prediction</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page Content -->
+    {% if request.path == '/' %}
+    <div class="home-content">
+        <h1>Welcome to the Raisin Classification App</h1>
+        <p>This project is designed to predict the type of raisin by using Area, Major Axis Length, Minor Axis Length, Eccentricity, and Convex Area.</p>
+        <p>On the Prediction page, you can input your details and get what type of raisin it is.</p>
+        <p>Benefits of Raisin Classification</p>
+        <p>1.By accurately classifying different types of raisins based on physical characteristics, this project can help farmers and producers streamline the sorting process, leading to more efficient operations and reduced labor costs.</p>
+        <p>2.Automated classification ensures that only the highest quality raisins are selected for specific purposes, such as premium packaging or export, thereby improving overall product quality and consistency.</p>
+    </div>
+    {% endif %}
+
+    <!-- Prediction Page Content -->
+    {% if request.path == '/predict' %}
+    <div class="container">
+        <div class="form">
+            <form id="predictionForm" action="/predict" method="POST">
+                <h1>Raisin Classification</h1>
+                <label for="area">Area:</label>
+                <input type="text" id="area" name="area" required min="0" class="styled-input"><br>
+
+                <label for="major_axis">Major Axis Length:</label>
+                <input type="text" id="major_axis" name="major_axis_length" required="0" class="styled-input"><br>
+
+                <label for="minor_axis">Minor Axis Length:</label>
+                <input type="text" id="minor_axis" name="minor_axis_length" required="0" class="styled-input"><br>
+
+                <label for="eccentricity">Eccentricity:</label>
+                <input type="text" id="eccentricity" name="eccentricity" required="0" class="styled-input"><br>
+
+                <label for="convex_area">Convex Area:</label>
+                <input type="text" id="convex_area" name="convex_area" required="0" class="styled-input"><br>
+
+                <label for="extent">Extent:</label>
+                <input type="text" id="extent" name="extent" required="0" class="styled-input"><br>
+
+                <label for="perimeter">Perimeter:</label>
+                <input type="text" id="perimeter" name="perimeter" required="0" class="styled-input"><br>
+
+                <button type="submit">Predict</button>
+            </form>
+        </div>
+        <div id="result" class="result" style="display: none;">
+            <h2>The Raisin type is : <span id="predictionValue"></span></h2>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Create a FormData object from the form
+            var formData = new FormData(event.target);
+
+            // Send an AJAX request to the server
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the result element with the prediction
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('predictionValue').innerText = data.prediction;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
