@@ -65,6 +65,7 @@ License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 Author
-Your Name - yourusername
+Your Name - Likitha
+
 Acknowledgements
 Thanks to the raisin dataset contributors for providing the data used in this project.
